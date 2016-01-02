@@ -280,8 +280,12 @@ class AcrobotEnvironment:
 
 
     # Added for DQN
+    def getScreenGrayscale(self):
+        im = ImageGrab.grab(bbox=(0,45,400,400)).convert('L').rezise((84,84))
+        array = asarray(im)
+
     def getMinimalActionSet(self):
-        return np.asarray(self.action_list)
+        return asarray(self.action_list)
 
     def getScreenDims(self):
         return self.x_dim, self.y_dim

@@ -7,7 +7,6 @@ run_nips.py or run_nature.py.
 import os
 import argparse
 import logging
-import ale_python_interface
 import cPickle
 import numpy as np
 import theano
@@ -15,6 +14,7 @@ import theano
 import ale_experiment
 import ale_agent
 import q_network
+from Environments.AcrobotEnvironmentG import AcrobotEnvironment
 
 def process_args(args, defaults, description):
     """
@@ -186,23 +186,23 @@ def launch(args, defaults, description):
     if parameters.cudnn_deterministic:
         theano.config.dnn.conv.algo_bwd = 'deterministic'
 
-    ale = ale_python_interface.ALEInterface()
-    ale.setInt('random_seed', rng.randint(1000))
+    ale = AcrobotEnvironment()
+    #ale.setInt('random_seed', rng.randint(1000))
 
-    if parameters.display_screen:
-        import sys
-        if sys.platform == 'darwin':
-            import pygame
-            pygame.init()
-            ale.setBool('sound', False) # Sound doesn't work on OSX
+    # if parameters.display_screen:
+    #     import sys
+    #     if sys.platform == 'darwin':
+    #         import pygame
+    #         pygame.init()
+    #         ale.setBool('sound', False) # Sound doesn't work on OSX
 
-    ale.setBool('display_screen', parameters.display_screen)
-    ale.setFloat('repeat_action_probability',
-                 parameters.repeat_action_probability)
+    # ale.setBool('display_screen', parameters.display_screen)
+    # ale.setFloat('repeat_action_probability',
+    #              parameters.repeat_action_probability)
 
-    ale.loadROM(full_rom_path)
+    # ale.loadROM(full_rom_path)
 
-    num_actions = len(ale.getMinimalActionSet())
+    num_actions = len(ale.nactions)
 
     if parameters.nn_file is None:
         network = q_network.DeepQLearner(defaults.RESIZED_WIDTH,

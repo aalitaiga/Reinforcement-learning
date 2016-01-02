@@ -39,7 +39,9 @@ class AcrobotEnvironment:
     g         = 9.8
     delta_t   = 0.05
 
-
+    # Screen dimensions
+    x_dim=84
+    y_dim=84
 
     #The number of actions.
     action_list = (-1.0 , 0.0 , 1.0)
@@ -57,7 +59,8 @@ class AcrobotEnvironment:
     # do you want to show nice graphs?
     graphs = True
 
-
+    # Position of current state
+    x = [0,0,0,0]
 
     def __init__(self):
 
@@ -121,7 +124,7 @@ class AcrobotEnvironment:
         return r,f
 
 
-    def DoAction(self, a, x ):
+    def DoAction(self, a, x=self.x):
 
         self.steps = self.steps+1
         torque      = self.action_list[a]
@@ -167,11 +170,11 @@ class AcrobotEnvironment:
 
 
 
-##	if theta1<-pi:
-##	    theta1 = -pi
-##
-##        if theta1>pi:
-##            theta1 = pi
+        #	if theta1<-pi:
+        #	    theta1 = -pi
+        #
+        #        if theta1>pi:
+        #            theta1 = pi
 
         if theta2<-pi:
             theta2 = -pi
@@ -182,6 +185,7 @@ class AcrobotEnvironment:
 
 
         xp = [theta1,theta2,theta1_dot,theta2_dot]
+        self.x = xp
 
         if self.graphs:
             if not self.scene.visible:
@@ -191,7 +195,8 @@ class AcrobotEnvironment:
             im = ImageGrab.grab(bbox=(0,45,400,320)).convert('LA')
             import pdb; pdb.set_trace()
 
-        return xp
+
+        return self.GetReward(self.x)
 
 
 
@@ -202,7 +207,7 @@ class AcrobotEnvironment:
     #------------------------------------ PLOT FUNCTIONS -----------------------------
 
 
-    def InitGraphs(self):
+    def InitGraphs(self, x=[0,0,0,0]):
 
         x_width  = 400
         y_height = 400
@@ -212,8 +217,8 @@ class AcrobotEnvironment:
 
         self.scene.autoscale=0
 
-        theta1 = 0
-        theta2 = 0
+        theta1 = x[0]
+        theta2 = x[1]
         x_acrobot = [0,0,0]
         y_acrobot = [0,0,0]
 
@@ -235,6 +240,8 @@ class AcrobotEnvironment:
         self.link2 = curve(diplsay = self.scene,pos=[self.r2.pos,self.r3.pos], radius=0.1)
 
         self.top   = arrow(diplsay = self.scene,pos=(0,6,0), axis=(0,-2,0), shaftwidth=1)
+
+        self
 
 
 
@@ -270,6 +277,23 @@ class AcrobotEnvironment:
 
 
         rate(1000)
+
+
+    # Added for DQN
+    def getMinimalActionSet(self):
+        return np.asarray(self.action_list)
+
+    def getScreenDims(self):
+        return self.x_dim, self.y_dim
+
+
+    def game_over(self):
+        return self.reset
+
+    reset_game = InitGraphs
+
+    act = DoAction
+    
 
 
 

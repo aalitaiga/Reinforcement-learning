@@ -14,7 +14,7 @@ import theano
 import ale_experiment
 import ale_agent
 import q_network
-from ..Environments.AcrobotEnvironmentG import AcrobotEnvironment
+from FAReinforcement_V2.Environments.AcrobotEnvironmentG import AcrobotEnvironment
 
 def process_args(args, defaults, description):
     """

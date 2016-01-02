@@ -44,7 +44,7 @@ class AcrobotEnvironment:
     y_dim=84
 
     #The number of actions.
-    action_list = (-1.0 , 0.0 , 1.0)
+    action_list = (0.0 , -1.0 , 1.0)
     nactions    = len(action_list)
 
     #Flag which is set to true when goal was reached.
@@ -280,9 +280,10 @@ class AcrobotEnvironment:
 
 
     # Added for DQN
-    def getScreenGrayscale(self):
+    def getScreenGrayscale(self, buffer):
         im = ImageGrab.grab(bbox=(0,45,400,400)).convert('L').rezise((84,84))
         array = asarray(im)
+        buffer = 
 
     def getMinimalActionSet(self):
         return asarray(self.action_list)

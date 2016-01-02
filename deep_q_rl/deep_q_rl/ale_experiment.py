@@ -106,7 +106,8 @@ class ALEExperiment(object):
         reward = self.ale.act(action)
         index = self.buffer_count % self.buffer_length
 
-        self.ale.getScreenGrayscale(self.screen_buffer[index, ...])
+        #self.ale.getScreenGrayscale(self.screen_buffer[index, ...])
+        self.screen_buffer[index, ...]=self.ale.getScreenGrayscale()
 
         self.buffer_count += 1
         return reward
@@ -134,14 +135,14 @@ class ALEExperiment(object):
 
         self._init_episode()
 
-        start_lives = self.ale.lives()
+        #start_lives = self.ale.lives()
 
         action = self.agent.start_episode(self.get_observation())
         num_steps = 0
         while True:
             reward = self._step(self.min_action_set[action])
-            self.terminal_lol = (self.death_ends_episode and not testing and
-                                 self.ale.lives() < start_lives)
+            self.terminal_lol = (self.death_ends_episode and not testing)# and
+                                 #self.ale.lives() < start_lives)
             terminal = self.ale.game_over() or self.terminal_lol
             num_steps += 1
 
@@ -160,30 +161,31 @@ class ALEExperiment(object):
         index = self.buffer_count % self.buffer_length - 1
         max_image = np.maximum(self.screen_buffer[index, ...],
                                self.screen_buffer[index - 1, ...])
-        return self.resize_image(max_image)
+        # return self.resize_image(max_image)
+        return max_image
 
-    def resize_image(self, image):
-        """ Appropriately resize a single image """
+    # def resize_image(self, image):
+    #     """ Appropriately resize a single image """
 
-        if self.resize_method == 'crop':
-            # resize keeping aspect ratio
-            resize_height = int(round(
-                float(self.height) * self.resized_width / self.width))
+    #     if self.resize_method == 'crop':
+    #         # resize keeping aspect ratio
+    #         resize_height = int(round(
+    #             float(self.height) * self.resized_width / self.width))
 
-            resized = cv2.resize(image,
-                                 (self.resized_width, resize_height),
-                                 interpolation=cv2.INTER_LINEAR)
+    #         resized = cv2.resize(image,
+    #                              (self.resized_width, resize_height),
+    #                              interpolation=cv2.INTER_LINEAR)
 
-            # Crop the part we want
-            crop_y_cutoff = resize_height - CROP_OFFSET - self.resized_height
-            cropped = resized[crop_y_cutoff:
-                              crop_y_cutoff + self.resized_height, :]
+    #         # Crop the part we want
+    #         crop_y_cutoff = resize_height - CROP_OFFSET - self.resized_height
+    #         cropped = resized[crop_y_cutoff:
+    #                           crop_y_cutoff + self.resized_height, :]
 
-            return cropped
-        elif self.resize_method == 'scale':
-            return cv2.resize(image,
-                              (self.resized_width, self.resized_height),
-                              interpolation=cv2.INTER_LINEAR)
-        else:
-            raise ValueError('Unrecognized image resize method.')
+    #         return cropped
+    #     elif self.resize_method == 'scale':
+    #         return cv2.resize(image,
+    #                           (self.resized_width, self.resized_height),
+    #                           interpolation=cv2.INTER_LINEAR)
+    #     else:
+    #         raise ValueError('Unrecognized image resize method.')
 

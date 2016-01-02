@@ -15,9 +15,9 @@ class Defaults:
     # ----------------------
     # Experiment Parameters
     # ----------------------
-    STEPS_PER_EPOCH = 10 # default 50000
+    STEPS_PER_EPOCH = 2 # default 50000
     EPOCHS = 2 # default 100
-    STEPS_PER_TEST = 10 # default 1000
+    STEPS_PER_TEST = 2 # default 1000
 
     # ----------------------
     # ALE Parameters
@@ -45,7 +45,7 @@ class Defaults:
     UPDATE_FREQUENCY = 1
     REPLAY_MEMORY_SIZE = 1000000
     BATCH_SIZE = 32
-    NETWORK_TYPE = "nips_dnn"
+    NETWORK_TYPE = "nips_cuda"
     FREEZE_INTERVAL = -1
     REPLAY_START_SIZE = 100
     RESIZE_METHOD = 'crop'

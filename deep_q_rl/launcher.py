@@ -39,7 +39,7 @@ def process_args(args, defaults, description):
                         action='store_true', default=False,
                         help='Show the game screen.')
     parser.add_argument('--experiment-prefix', dest="experiment_prefix",
-                        default=None,
+                        default='test',
                         help='Experiment name prefix '
                         '(default is the name of the game)')
     parser.add_argument('--frame-skip', dest="frame_skip",
@@ -195,7 +195,7 @@ def launch(args, defaults, description):
 
     # ale.loadROM(full_rom_path)
 
-    num_actions = len(ale.nactions)
+    num_actions = ale.nactions
 
     if parameters.nn_file is None:
         network = q_network.DeepQLearner(defaults.RESIZED_WIDTH,

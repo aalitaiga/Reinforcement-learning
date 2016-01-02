@@ -2,6 +2,7 @@ from numpy import *
 
 from visual import *
 from visual.graph import *
+import pyscreenshot as ImageGrab
 
 
 class AcrobotEnvironment:
@@ -17,7 +18,7 @@ class AcrobotEnvironment:
     input_ranges  = [[-pi,pi],[-pi,pi],[-4*pi,4*pi],[-9*pi,9*pi]]
     reward_ranges = [[-1.0,1000.0]]
     deep_in = [10,10,5,5] #2^n partitions
-    deep_out= [10] #2^n different partitions
+    deep_out = [10] #2^n different partitions
 
 
 
@@ -95,7 +96,7 @@ class AcrobotEnvironment:
          pass
 
 
-    def GetReward(self, x ):
+    def GetReward(self, x):
         # r: the returned reward.
         # f: true if the car reached the goal, otherwise f is false
         y_acrobot = [0,0,0]
@@ -121,13 +122,18 @@ class AcrobotEnvironment:
             f = True
 
 
-        return r,f
+        return r
 
 
-    def DoAction(self, a, x=self.x):
+    def DoAction(self, a, x=None):
+        if x is None:
+            x = self.x
 
         self.steps = self.steps+1
-        torque      = self.action_list[a]
+        try:
+            torque      = self.action_list[int(a)]
+        except:
+            import pdb; pdb.set_trace()
 
         # Parameters for simulation
         theta1,theta2,theta1_dot,theta2_dot = x
@@ -191,17 +197,8 @@ class AcrobotEnvironment:
             if not self.scene.visible:
                 self.scene.visible=True
             self.PlotFunc(xp,torque,self.steps)
-            import pyscreenshot as ImageGrab
-            im = ImageGrab.grab(bbox=(0,45,400,320)).convert('LA')
-            import pdb; pdb.set_trace()
-
 
         return self.GetReward(self.x)
-
-
-
-
-
 
 
     #------------------------------------ PLOT FUNCTIONS -----------------------------
@@ -280,10 +277,9 @@ class AcrobotEnvironment:
 
 
     # Added for DQN
-    def getScreenGrayscale(self, buffer):
-        im = ImageGrab.grab(bbox=(0,45,400,400)).convert('L').rezise((84,84))
-        array = asarray(im)
-        buffer = 
+    def getScreenGrayscale(self):
+        im = ImageGrab.grab(bbox=(0,45,400,400)).convert('L').resize((84,84))
+        return asarray(im)
 
     def getMinimalActionSet(self):
         return asarray(self.action_list)

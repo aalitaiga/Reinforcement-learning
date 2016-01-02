@@ -40,9 +40,12 @@ class NeuralAgent(object):
 
         # CREATE A FOLDER TO HOLD RESULTS
         time_str = time.strftime("_%m-%d-%H-%M_", time.gmtime())
-        self.exp_dir = self.exp_pref + time_str + \
-                       "{}".format(self.network.lr).replace(".", "p") + "_" \
-                       + "{}".format(self.network.discount).replace(".", "p")
+        try:
+            self.exp_dir = self.exp_pref + time_str + \
+                           "{}".format(self.network.lr).replace(".", "p") + "_" \
+                           + "{}".format(self.network.discount).replace(".", "p")
+        except:
+            import pdb; pdb.set_trace()
 
         try:
             os.stat(self.exp_dir)

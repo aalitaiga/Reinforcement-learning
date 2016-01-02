@@ -230,37 +230,34 @@ class DeepQLearner:
             shape=(batch_size, num_frames, input_width, input_height)
         )
 
-        l_conv1 = cuda_convnet.Conv2DCCLayer(
+        l_conv1 = lasagne.layers.Conv2DLayer(
             l_in,
             num_filters=32,
             filter_size=(8, 8),
-            stride=(4, 4),
+            stride=(4,4),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.HeUniform(), # Defaults to Glorot
-            b=lasagne.init.Constant(.1),
-            dimshuffle=True
+            b=lasagne.init.Constant(.1)
         )
 
-        l_conv2 = cuda_convnet.Conv2DCCLayer(
+        l_conv2 = lasagne.layers.Conv2DLayer(
             l_conv1,
             num_filters=64,
             filter_size=(4, 4),
             stride=(2, 2),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.HeUniform(),
-            b=lasagne.init.Constant(.1),
-            dimshuffle=True
+            b=lasagne.init.Constant(.1)
         )
 
-        l_conv3 = cuda_convnet.Conv2DCCLayer(
+        l_conv3 = lasagne.layers.Conv2DLayer(
             l_conv2,
             num_filters=64,
             filter_size=(3, 3),
             stride=(1, 1),
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.HeUniform(),
-            b=lasagne.init.Constant(.1),
-            dimshuffle=True
+            b=lasagne.init.Constant(.1)
         )
 
         l_hidden1 = lasagne.layers.DenseLayer(
@@ -348,12 +345,11 @@ class DeepQLearner:
         """
         Build a network consistent with the 2013 NIPS paper.
         """
-        from lasagne.layers import cuda_convnet
         l_in = lasagne.layers.InputLayer(
             shape=(batch_size, num_frames, input_width, input_height)
         )
 
-        l_conv1 = cuda_convnet.Conv2DCCLayer(
+        l_conv1 = lasagne.layers.Conv2DLayer(
             l_in,
             num_filters=16,
             filter_size=(8, 8),
@@ -361,11 +357,10 @@ class DeepQLearner:
             nonlinearity=lasagne.nonlinearities.rectify,
             #W=lasagne.init.HeUniform(c01b=True),
             W=lasagne.init.Normal(.01),
-            b=lasagne.init.Constant(.1),
-            dimshuffle=True
+            b=lasagne.init.Constant(.1)
         )
 
-        l_conv2 = cuda_convnet.Conv2DCCLayer(
+        l_conv2 = lasagne.layers.Conv2DLayer(
             l_conv1,
             num_filters=32,
             filter_size=(4, 4),
@@ -373,8 +368,7 @@ class DeepQLearner:
             nonlinearity=lasagne.nonlinearities.rectify,
             #W=lasagne.init.HeUniform(c01b=True),
             W=lasagne.init.Normal(.01),
-            b=lasagne.init.Constant(.1),
-            dimshuffle=True
+            b=lasagne.init.Constant(.1)
         )
 
         l_hidden1 = lasagne.layers.DenseLayer(

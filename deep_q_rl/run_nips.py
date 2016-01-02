@@ -15,9 +15,9 @@ class Defaults:
     # ----------------------
     # Experiment Parameters
     # ----------------------
-    STEPS_PER_EPOCH = 50000
-    EPOCHS = 100
-    STEPS_PER_TEST = 10000
+    STEPS_PER_EPOCH = 10 # default 50000
+    EPOCHS = 2 # default 100
+    STEPS_PER_TEST = 10 # default 1000
 
     # ----------------------
     # ALE Parameters

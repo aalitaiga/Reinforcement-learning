@@ -26,8 +26,6 @@ def process_args(args, defaults, description):
     description - a string to display at the top of the help message.
     """
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-r', '--rom', dest="rom", default=defaults.ROM,
-                        help='ROM to run (default: %(default)s)')
     parser.add_argument('-e', '--epochs', dest="epochs", type=int,
                         default=defaults.EPOCHS,
                         help='Number of training epochs (default: %(default)s)')
@@ -140,9 +138,9 @@ def process_args(args, defaults, description):
                               '(default: %(default)s)'))
 
     parameters = parser.parse_args(args)
-    if parameters.experiment_prefix is None:
-        name = os.path.splitext(os.path.basename(parameters.rom))[0]
-        parameters.experiment_prefix = name
+    # if parameters.experiment_prefix is None:
+    #     name = os.path.splitext(os.path.basename(parameters.rom))[0]
+    #     parameters.experiment_prefix = name
 
     if parameters.death_ends_episode == 'true':
         parameters.death_ends_episode = True
@@ -172,11 +170,6 @@ def launch(args, defaults, description):
     logging.basicConfig(level=logging.INFO)
     parameters = process_args(args, defaults, description)
 
-    if parameters.rom.endswith('.bin'):
-        rom = parameters.rom
-    else:
-        rom = "%s.bin" % parameters.rom
-    full_rom_path = os.path.join(defaults.BASE_ROM_PATH, rom)
 
     if parameters.deterministic:
         rng = np.random.RandomState(123456)

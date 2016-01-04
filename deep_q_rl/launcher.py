@@ -14,7 +14,7 @@ import theano
 import ale_experiment
 import ale_agent
 import q_network
-from FAReinforcement_V2.Environments.AcrobotEnvironmentG import AcrobotEnvironment
+from AcrobotEnvironmentG import AcrobotEnvironment
 
 def process_args(args, defaults, description):
     """
@@ -216,6 +216,7 @@ def launch(args, defaults, description):
                                          rng)
     else:
         handle = open(parameters.nn_file, 'r')
+        import pdb; pdb.set_trace()
         network = cPickle.load(handle)
 
     agent = ale_agent.NeuralAgent(network,

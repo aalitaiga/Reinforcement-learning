@@ -39,13 +39,16 @@ class AcrobotEnvironment:
     I2        = 1.0
     g         = 9.8
     delta_t   = 0.05
+    thetalim  = acos(1- (0.3*0.3/2))
 
     # Screen dimensions
     x_dim=84
     y_dim=84
 
     #The number of actions.
-    action_list = (0.0 , -1.0 , 1.0)
+    adj = 1
+    action_list = (0.0 , -1.0/adj , 1.0/adj)
+    
     nactions    = len(action_list)
 
     #Flag which is set to true when goal was reached.
@@ -130,11 +133,9 @@ class AcrobotEnvironment:
             x = self.x
 
         self.steps = self.steps+1
-        try:
-            torque      = self.action_list[int(a)]
-        except:
-            import pdb; pdb.set_trace()
+        torque     = self.action_list[int(a)]
 
+        #import pdb; pdb.set_trace()
         # Parameters for simulation
         theta1,theta2,theta1_dot,theta2_dot = x
 
@@ -238,7 +239,7 @@ class AcrobotEnvironment:
 
         self.top   = arrow(diplsay = self.scene,pos=(0,6,0), axis=(0,-2,0), shaftwidth=1)
 
-        self
+        
 
 
 
@@ -246,8 +247,21 @@ class AcrobotEnvironment:
 
     def PlotFunc(self,s,a,steps):
 
+
         theta1 = s[0]
         theta2 = s[1]
+
+        # Handles sphere chocs
+        theta3 = theta2 - theta1
+        if ( ((pi - theta3) <= self.thetalim) & (theta3 > 0) ):
+            #import pdb ; pdb.set_trace()
+            self.x[3]=-0.85*self.x[3]
+            theta2 = theta1 + pi - 1.1*self.thetalim
+        elif (((theta3 + pi) <= self.thetalim) & (theta3 < 0) ):
+            #import pdb ; pdb.set_trace()
+            self.x[3]=-0.85*self.x[3]
+            theta2 = theta1 - pi - 1.1*self.thetalim
+
 
         x_acrobot = [0,0,0]
         y_acrobot = [0,0,0]
@@ -295,7 +309,6 @@ class AcrobotEnvironment:
 
     act = DoAction
     
-
 
 
 

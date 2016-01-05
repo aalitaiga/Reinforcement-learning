@@ -14,6 +14,7 @@ import numpy as np
 import random
 import pygame
 import sys
+import time
 from pygame.locals import *
 
 FPS = 15
@@ -174,7 +175,9 @@ class ALEExperiment(object):
 
         action = self.agent.start_episode(self.get_observation())
         num_steps = 0
+        # wait = 1.0 / 40
         while True:
+            # t1 = time.time()
             reward = self._step(self.min_action_set[action])
             self.terminal_lol = (self.death_ends_episode and not testing)# and
                                  #self.ale.lives() < start_lives)
@@ -186,6 +189,9 @@ class ALEExperiment(object):
                 break
 
             action = self.agent.step(reward, self.get_observation())
+            # t2 = time.time() - t1
+            # if t2 < wait:
+            #     time.sleep(wait-t2)
         return terminal, num_steps
 
 

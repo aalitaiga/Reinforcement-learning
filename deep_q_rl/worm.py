@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import pygame
+import time
 from pygame.locals import *
 
 UP = 'up'
@@ -26,7 +27,6 @@ GREEN     = (  0, 255,   0)
 DARKGREEN = (  0, 155,   0)
 DARKGRAY  = ( 40,  40,  40)
 BGCOLOR = BLACK
-
 
 class Snake:
 
@@ -60,13 +60,11 @@ class Snake:
         # check if the worm has hit itself or the edge
         if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
             self.gameover = True
-            pygame.quit()
             self.reset_game()
             return -1 # game over
         for wormBody in self.wormCoords[1:]:
             if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
                 self.gameover = True
-                pygame.quit()
                 self.reset_game()
                 return -1 # game over
 
@@ -93,7 +91,6 @@ class Snake:
 
         if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
             self.gameover = True
-            pygame.quit()
             self.reset_game()
             return -1 # game over
 
@@ -102,7 +99,7 @@ class Snake:
             drawGrid()
             drawWorm(self.wormCoords)
             drawApple(self.apple)
-            drawScore(len(self.wormCoords) - 3)
+            #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
         return reward
 
@@ -157,7 +154,7 @@ class Snake:
             drawGrid()
             drawWorm(self.wormCoords)
             drawApple(self.apple)
-            drawScore(len(self.wormCoords) - 3)
+            #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
 
     def getRandomLocation(self):

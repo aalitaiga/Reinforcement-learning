@@ -14,7 +14,7 @@ import theano
 import ale_experiment
 import ale_agent
 import q_network
-from AcrobotEnvironmentG import AcrobotEnvironment
+from worm import Snake
 
 def process_args(args, defaults, description):
     """
@@ -179,7 +179,7 @@ def launch(args, defaults, description):
     if parameters.cudnn_deterministic:
         theano.config.dnn.conv.algo_bwd = 'deterministic'
 
-    ale = AcrobotEnvironment()
+    ale = Snake(display=True)
     #ale.setInt('random_seed', rng.randint(1000))
 
     # if parameters.display_screen:

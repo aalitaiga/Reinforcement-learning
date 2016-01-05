@@ -4,9 +4,42 @@ Q-learning agent in the Arcade Learning Environment.
 Author: Nathan Sprague
 
 """
+# Wormy (a Nibbles clone)
+# By Al Sweigart al@inventwithpython.com
+# http://inventwithpython.com/pygame
+# Released under a "Simplified BSD" license
+
 import logging
 import numpy as np
-import cv2
+import random
+import pygame
+import sys
+from pygame.locals import *
+
+FPS = 15
+WINDOWWIDTH = 640
+WINDOWHEIGHT = 480
+CELLSIZE = 20
+assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
+assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
+CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
+CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
+
+#             R    G    B
+WHITE     = (255, 255, 255)
+BLACK     = (  0,   0,   0)
+RED       = (255,   0,   0)
+GREEN     = (  0, 255,   0)
+DARKGREEN = (  0, 155,   0)
+DARKGRAY  = ( 40,  40,  40)
+BGCOLOR = BLACK
+
+UP = 'up'
+DOWN = 'down'
+LEFT = 'left'
+RIGHT = 'right'
+
+HEAD = 0 # syntactic sugar: index of the worm's head
 
 # Number of rows to crop off the bottom of the (downsampled) screen.
 # This is appropriate for breakout, but it may need to be modified
@@ -51,9 +84,11 @@ class ALEExperiment(object):
             self.agent.finish_epoch(epoch)
 
             if self.test_length > 0:
+                self.ale.display = True
                 self.agent.start_testing()
                 self.run_epoch(epoch, self.test_length, True)
                 self.agent.finish_testing(epoch)
+                self.ale.display = False
 
     def run_epoch(self, epoch, num_steps, testing=False):
         """ Run one 'epoch' of training or testing, where an epoch is defined
@@ -107,7 +142,7 @@ class ALEExperiment(object):
         index = self.buffer_count % self.buffer_length
 
         #self.ale.getScreenGrayscale(self.screen_buffer[index, ...])
-        self.screen_buffer[index, ...]=self.ale.getScreenGrayscale()
+        self.screen_buffer[index, ...] = self.ale.getScreenGrayscale()
 
         self.buffer_count += 1
         return reward
@@ -163,29 +198,3 @@ class ALEExperiment(object):
                                self.screen_buffer[index - 1, ...])
         # return self.resize_image(max_image)
         return max_image
-
-    # def resize_image(self, image):
-    #     """ Appropriately resize a single image """
-
-    #     if self.resize_method == 'crop':
-    #         # resize keeping aspect ratio
-    #         resize_height = int(round(
-    #             float(self.height) * self.resized_width / self.width))
-
-    #         resized = cv2.resize(image,
-    #                              (self.resized_width, resize_height),
-    #                              interpolation=cv2.INTER_LINEAR)
-
-    #         # Crop the part we want
-    #         crop_y_cutoff = resize_height - CROP_OFFSET - self.resized_height
-    #         cropped = resized[crop_y_cutoff:
-    #                           crop_y_cutoff + self.resized_height, :]
-
-    #         return cropped
-    #     elif self.resize_method == 'scale':
-    #         return cv2.resize(image,
-    #                           (self.resized_width, self.resized_height),
-    #                           interpolation=cv2.INTER_LINEAR)
-    #     else:
-    #         raise ValueError('Unrecognized image resize method.')
-

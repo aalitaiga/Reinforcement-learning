@@ -13,6 +13,7 @@ NOTHING = 'rien'
 WINDOWWIDTH = 84
 WINDOWHEIGHT = 84
 CELLSIZE = 3
+ZOOM = 7
 assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
@@ -33,7 +34,7 @@ class Snake:
     action_list = (NOTHING,UP,DOWN,LEFT,RIGHT)
     nactions = len(action_list)
 
-    def __init__(self, display=False):
+    def __init__(self, display=False, gameover= False):
         startx = random.randint(5, CELLWIDTH - 6)
         starty = random.randint(5, CELLHEIGHT - 6)
         self.wormCoords = [
@@ -42,7 +43,7 @@ class Snake:
             {'x': startx - 2, 'y': starty}
         ]
         self.direction = RIGHT
-        self.gameover = False
+        self.gameover = gameover
         self.apple = self.getRandomLocation()
         self.display = display
 
@@ -58,28 +59,24 @@ class Snake:
             self.direction = DOWN
 
         # check if the worm has hit itself or the edge
-        if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
-            self.gameover = True
-            self.reset_game()
-            return -1 # game over
-        for wormBody in self.wormCoords[1:]:
-            if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
-                self.gameover = True
-                self.reset_game()
-                return -1 # game over
+        # if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
+        #     self.gameover = True
+        #     self.reset_game()
+        #     return -1 # game over
+        # for wormBody in self.wormCoords[1:]:
+        #     if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
+        #         self.gameover = True
+        #         self.reset_game()
+        #         return -1 # game over
 
-        reward = 0
-        # check if worm has eaten an apply
-        if self.wormCoords[HEAD]['x'] == self.apple['x'] and self.wormCoords[HEAD]['y'] == self.apple['y']:
-            # don't remove worm's tail segment
-            self.apple = self.getRandomLocation() # set a new apple somewhere
-            reward = 1
-        else:
-            del self.wormCoords[-1] # remove worm's tail segment
+
 
         # move the worm by adding a segment in the direction it is moving
         if self.direction == UP:
-            newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] - 1}
+            try :
+                newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] - 1}
+            except : 
+                import pdb; pdb.set_trace()
         elif self.direction == DOWN:
             newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] + 1}
         elif self.direction == LEFT:
@@ -91,8 +88,24 @@ class Snake:
 
         if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
             self.gameover = True
-            self.reset_game()
-            return -1 # game over
+            del self.wormCoords[0]
+            #self.reset_game()
+            return -10 # game over
+        for wormBody in self.wormCoords[1:]:
+            if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
+                self.gameover = True
+                del self.wormCoords[0]
+                #self.reset_game()
+                return -10 # game over
+
+        reward = -1
+        # check if worm has eaten an apple
+        if self.wormCoords[HEAD]['x'] == self.apple['x'] and self.wormCoords[HEAD]['y'] == self.apple['y']:
+            # don't remove worm's tail segment
+            self.apple = self.getRandomLocation() # set a new apple somewhere
+            reward = 1
+        else:
+            del self.wormCoords[-1] # remove worm's tail segment
 
         if self.display:
             DISPLAYSURF.fill(BGCOLOR)
@@ -104,7 +117,7 @@ class Snake:
         return reward
 
     def getScreenGrayscale(self):
-        array = np.zeros((WINDOWWIDTH,WINDOWHEIGHT))
+        array = np.zeros((WINDOWWIDTH,WINDOWHEIGHT),dtype=np.uint8)
 
         # snake
         for point in self.wormCoords:
@@ -112,6 +125,8 @@ class Snake:
 
         # apple
         self._fillArray(array, self.apple['x'], self.apple['y'], CELLSIZE, 255)
+
+
         return array
 
     def _fillArray(self,array,x,y,cellsize,color):
@@ -146,7 +161,7 @@ class Snake:
             global FPSCLOCK, DISPLAYSURF, BASICFONT
 
             pygame.init()
-            DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+            DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH*ZOOM, WINDOWHEIGHT*ZOOM))
             BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
             pygame.display.set_caption('Wormy')
 
@@ -168,22 +183,24 @@ def drawScore(score):
 
 def drawWorm(wormCoords):
     for coord in wormCoords:
-        x = coord['x'] * CELLSIZE
-        y = coord['y'] * CELLSIZE
-        wormSegmentRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
+        x = coord['x'] * CELLSIZE * ZOOM
+        y = coord['y'] * CELLSIZE * ZOOM
+        wormSegmentRect = pygame.Rect(x, y, CELLSIZE*ZOOM, CELLSIZE*ZOOM)
         pygame.draw.rect(DISPLAYSURF, DARKGREEN, wormSegmentRect)
-        wormInnerSegmentRect = pygame.Rect(x + 4, y + 4, CELLSIZE - 8, CELLSIZE - 8)
+        wormInnerSegmentRect = pygame.Rect(x + 4, y + 4, CELLSIZE*ZOOM - 8, CELLSIZE*ZOOM - 8)
         pygame.draw.rect(DISPLAYSURF, GREEN, wormInnerSegmentRect)
 
 def drawApple(coord):
-    x = coord['x'] * CELLSIZE
-    y = coord['y'] * CELLSIZE
-    appleRect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
+    x = coord['x'] * CELLSIZE * ZOOM
+    y = coord['y'] * CELLSIZE * ZOOM
+    appleRect = pygame.Rect(x, y, CELLSIZE*ZOOM, CELLSIZE*ZOOM)
     pygame.draw.rect(DISPLAYSURF, RED, appleRect)
 
 
 def drawGrid():
-    for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
-        pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
-    for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
-        pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH, y))
+    for x in range(0, WINDOWWIDTH*ZOOM, CELLSIZE*ZOOM): # draw vertical lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT*ZOOM))
+    for y in range(0, WINDOWHEIGHT*ZOOM, CELLSIZE*ZOOM): # draw horizontal lines
+        pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH*ZOOM, y))
+
+

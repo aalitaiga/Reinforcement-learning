@@ -23,8 +23,8 @@ class AcrobotEnvironment:
 
 
     # The current real values of the state
-    maxSpeed1 = 4*pi
-    maxSpeed2 = 9*pi
+    maxSpeed1 = 2*pi
+    maxSpeed2 = 4*pi
     m1        = 1.0
     m2        = 1.0
     l1        = 1.0
@@ -46,8 +46,8 @@ class AcrobotEnvironment:
     y_dim=84
 
     #The number of actions.
-    adj = 1
-    action_list = (0.0 , -1.0/adj , 1.0/adj)
+    adj = 1.8
+    action_list = (0.0 , -1.0 , 1.0)
     
     nactions    = len(action_list)
 
@@ -117,12 +117,12 @@ class AcrobotEnvironment:
 
         # r = y_acrobot[2]
         r = -1
-        f = False
+        
 
         if y_acrobot[2] >= goal:
         	#r = 10*y_acrobot[2]
             r = 0
-            f = True
+            self.reset = True
 
 
         return r
@@ -133,7 +133,7 @@ class AcrobotEnvironment:
             x = self.x
 
         self.steps = self.steps+1
-        torque     = self.action_list[int(a)]
+        torque     = self.action_list[int(a)]/self.adj
 
         #import pdb; pdb.set_trace()
         # Parameters for simulation
@@ -144,7 +144,7 @@ class AcrobotEnvironment:
             d1     = self.m1*self.lc1Square + self.m2*(self.l1Square + self.lc2Square + 2*self.l1*self.lc2 * cos(theta2)) + self.I1 + self.I2
             d2     = self.m2*(self.lc2Square+self.l1*self.lc2*cos(theta2)) + self.I2
 
-            phi2   = self.m2*self.lc2*self.g*cos(theta1+theta2-pi/2.0)
+            phi2   = self.m2*self.lc2*self.g*cos(theta1+theta2-(pi/2.0))
             phi1   = -self.m2*self.l1*self.lc2*theta2_dot*sin(theta2)*(theta2_dot-2*theta1_dot)+(self.m1*self.lc1+self.m2*self.l1)*self.g*cos(theta1-(pi/2.0))+phi2
 
             accel2 = (torque+phi1*(d2/d1)-self.m2*self.l1*self.lc2*theta1_dot*theta1_dot*sin(theta2)-phi2)
@@ -207,6 +207,7 @@ class AcrobotEnvironment:
 
     def InitGraphs(self, x=[0,0,0,0]):
 
+        self.x = [0,0,0,0]
         x_width  = 400
         y_height = 400
 
@@ -215,8 +216,8 @@ class AcrobotEnvironment:
 
         self.scene.autoscale=0
 
-        theta1 = x[0]
-        theta2 = x[1]
+        theta1 = self.x[0]
+        theta2 = self.x[1]
         x_acrobot = [0,0,0]
         y_acrobot = [0,0,0]
 
@@ -239,6 +240,8 @@ class AcrobotEnvironment:
 
         self.top   = arrow(diplsay = self.scene,pos=(0,6,0), axis=(0,-2,0), shaftwidth=1)
 
+        self.reset = False
+
         
 
 
@@ -252,15 +255,15 @@ class AcrobotEnvironment:
         theta2 = s[1]
 
         # Handles sphere chocs
-        theta3 = theta2 - theta1
-        if ( ((pi - theta3) <= self.thetalim) & (theta3 > 0) ):
-            #import pdb ; pdb.set_trace()
-            self.x[3]=-0.85*self.x[3]
-            theta2 = theta1 + pi - 1.1*self.thetalim
-        elif (((theta3 + pi) <= self.thetalim) & (theta3 < 0) ):
-            #import pdb ; pdb.set_trace()
-            self.x[3]=-0.85*self.x[3]
-            theta2 = theta1 - pi - 1.1*self.thetalim
+        # theta3 = theta2 - theta1
+        # if ( ((pi - theta3) <= self.thetalim) & (theta3 > 0) ):
+        #     #import pdb ; pdb.set_trace()
+        #     self.x[3]=-0.85*self.x[3]
+        #     theta2 = theta1 + pi - 1.1*self.thetalim
+        # elif (((theta3 + pi) <= self.thetalim) & (theta3 < 0) ):
+        #     #import pdb ; pdb.set_trace()
+        #     self.x[3]=-0.85*self.x[3]
+        #     theta2 = theta1 - pi - 1.1*self.thetalim
 
 
         x_acrobot = [0,0,0]

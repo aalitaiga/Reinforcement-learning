@@ -116,16 +116,17 @@ class Snake:
         # apple
         self._fillArray(array, self.apple['x'], self.apple['y'], CELLSIZE, 255)
 
-
+        # borders
+        array[0,:] = 90*np.ones((WINDOWHEIGHT,))
+        array[-1,:] = 90*np.ones((WINDOWHEIGHT,))
+        array[:,0] = 90*np.ones((1,WINDOWWIDTH))
+        array[:,-1] = 90*np.ones((1,WINDOWWIDTH))
         return array
 
     def _fillArray(self,array,x,y,cellsize,color):
         for i in xrange(cellsize):
             for j in xrange(cellsize):
-                try:
-                    array[x*cellsize+j, y*cellsize+i] = color
-                except:
-                    import pdb; pdb.set_trace()
+                array[x*cellsize+j, y*cellsize+i] = color
 
     def getMinimalActionSet(self):
         return np.asarray(range(5))

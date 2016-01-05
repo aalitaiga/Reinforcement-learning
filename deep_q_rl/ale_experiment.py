@@ -85,7 +85,7 @@ class ALEExperiment(object):
             self.agent.finish_epoch(epoch)
 
             if self.test_length > 0:
-                self.ale.display = False
+                self.ale.display = True
                 self.agent.start_testing()
                 self.run_epoch(epoch, self.test_length, True)
                 self.agent.finish_testing(epoch)

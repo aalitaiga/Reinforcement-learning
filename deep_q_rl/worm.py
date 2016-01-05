@@ -12,8 +12,8 @@ NOTHING = 'rien'
 
 WINDOWWIDTH = 84
 WINDOWHEIGHT = 84
-CELLSIZE = 3
-ZOOM = 7
+CELLSIZE = 6
+ZOOM = 5
 assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
@@ -25,6 +25,7 @@ WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
 GREEN     = (  0, 255,   0)
+EDGE      = (  0,   0, 255)
 DARKGREEN = (  0, 155,   0)
 DARKGRAY  = ( 40,  40,  40)
 BGCOLOR = BLACK
@@ -58,18 +59,6 @@ class Snake:
         elif self.action_list[int(action)] == DOWN and self.direction != UP:
             self.direction = DOWN
 
-        # check if the worm has hit itself or the edge
-        # if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
-        #     self.gameover = True
-        #     self.reset_game()
-        #     return -1 # game over
-        # for wormBody in self.wormCoords[1:]:
-        #     if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
-        #         self.gameover = True
-        #         self.reset_game()
-        #         return -1 # game over
-
-
 
         # move the worm by adding a segment in the direction it is moving
         if self.direction == UP:
@@ -86,7 +75,7 @@ class Snake:
 
         self.wormCoords.insert(0, newHead)
 
-        if self.wormCoords[HEAD]['x'] == -1 or self.wormCoords[HEAD]['x'] == CELLWIDTH or self.wormCoords[HEAD]['y'] == -1 or self.wormCoords[HEAD]['y'] == CELLHEIGHT:
+        if self.wormCoords[HEAD]['x'] == 0 or self.wormCoords[HEAD]['x'] == CELLWIDTH - 1 or self.wormCoords[HEAD]['y'] == 0 or self.wormCoords[HEAD]['y'] == CELLHEIGHT - 1:
             self.gameover = True
             del self.wormCoords[0]
             #self.reset_game()
@@ -112,6 +101,7 @@ class Snake:
             drawGrid()
             drawWorm(self.wormCoords)
             drawApple(self.apple)
+            drawEdge()
             #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
         return reward
@@ -169,11 +159,12 @@ class Snake:
             drawGrid()
             drawWorm(self.wormCoords)
             drawApple(self.apple)
+            drawEdge()
             #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
 
     def getRandomLocation(self):
-        return {'x': random.randint(0, CELLWIDTH - 1), 'y': random.randint(0, CELLHEIGHT - 1)}
+        return {'x': random.randint(1, CELLWIDTH - 2), 'y': random.randint(1, CELLHEIGHT - 2)}
 
 def drawScore(score):
     scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE)
@@ -202,5 +193,11 @@ def drawGrid():
         pygame.draw.line(DISPLAYSURF, DARKGRAY, (x, 0), (x, WINDOWHEIGHT*ZOOM))
     for y in range(0, WINDOWHEIGHT*ZOOM, CELLSIZE*ZOOM): # draw horizontal lines
         pygame.draw.line(DISPLAYSURF, DARKGRAY, (0, y), (WINDOWWIDTH*ZOOM, y))
+
+def drawEdge():
+    pygame.draw.rect(DISPLAYSURF, EDGE, (0, 0, WINDOWHEIGHT*ZOOM, CELLSIZE*ZOOM))
+    pygame.draw.rect(DISPLAYSURF, EDGE, ((WINDOWHEIGHT - CELLSIZE)*ZOOM, 0, CELLSIZE*ZOOM, WINDOWHEIGHT*ZOOM ))
+    pygame.draw.rect(DISPLAYSURF, EDGE, (0, 0, CELLSIZE*ZOOM, WINDOWWIDTH*ZOOM))
+    pygame.draw.rect(DISPLAYSURF, EDGE, (0, (WINDOWWIDTH - CELLSIZE)*ZOOM, WINDOWWIDTH*ZOOM, CELLSIZE*ZOOM ))
 
 

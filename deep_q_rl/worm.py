@@ -8,7 +8,6 @@ UP = 'up'
 DOWN = 'down'
 LEFT = 'left'
 RIGHT = 'right'
-NOTHING = 'rien'
 DIRECTIONS = (UP, DOWN, LEFT, RIGHT)
 
 WINDOWWIDTH = 84
@@ -51,7 +50,6 @@ class Snake:
 
     def act(self, action):
 
-        import pdb; pdb.set_trace()  # breakpoint c8bb0440 //
         if   action == 0:
             return 0
         elif action == LEFT and self.direction != RIGHT:

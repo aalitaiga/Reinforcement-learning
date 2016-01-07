@@ -9,6 +9,7 @@ DOWN = 'down'
 LEFT = 'left'
 RIGHT = 'right'
 NOTHING = 'rien'
+DIRECTIONS = (UP, DOWN, LEFT, RIGHT)
 
 WINDOWWIDTH = 84
 WINDOWHEIGHT = 84
@@ -43,7 +44,7 @@ class Snake:
             {'x': startx - 1, 'y': starty},
             {'x': startx - 2, 'y': starty}
         ]
-        self.direction = RIGHT
+        self.direction = DIRECTIONS[random.randint(0, 3)]
         self.gameover = gameover
         self.apple = self.getRandomLocation()
         self.display = display
@@ -145,7 +146,7 @@ class Snake:
             {'x': self.startx - 1, 'y': self.starty},
             {'x': self.startx - 2, 'y': self.starty}
         ]
-        self.direction = RIGHT
+        self.direction = DIRECTIONS[random.randint(0, 3)]
         self.gameover = False
 
         if self.display:

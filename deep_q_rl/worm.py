@@ -121,10 +121,10 @@ class Snake:
         self._fillArray(array, self.apple['x'], self.apple['y'], CELLSIZE, 255)
 
         # borders
-        array[0,:] = 90*np.ones((WINDOWHEIGHT,))
-        array[-1,:] = 90*np.ones((WINDOWHEIGHT,))
-        array[:,0] = 90*np.ones((1,WINDOWWIDTH))
-        array[:,-1] = 90*np.ones((1,WINDOWWIDTH))
+        array[:CELLSIZE,:] = 90*np.ones((CELLSIZE,WINDOWHEIGHT))
+        array[-CELLSIZE:,:] = 90*np.ones((CELLSIZE,WINDOWHEIGHT))
+        array[:,:CELLSIZE] = 90*np.ones((WINDOWWIDTH,CELLSIZE))
+        array[:,-CELLSIZE:] = 90*np.ones((WINDOWWIDTH,CELLSIZE))
         return array
 
     def _fillArray(self,array,x,y,cellsize,color):

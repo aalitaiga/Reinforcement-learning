@@ -179,7 +179,7 @@ def launch(args, defaults, description):
     if parameters.cudnn_deterministic:
         theano.config.dnn.conv.algo_bwd = 'deterministic'
 
-    ale = Snake(display=True)
+    ale = Snake(display=False)
     #ale.setInt('random_seed', rng.randint(1000))
 
     # if parameters.display_screen:

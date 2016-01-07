@@ -33,7 +33,7 @@ BGCOLOR = BLACK
 
 class Snake:
 
-    action_list = (NOTHING,UP,DOWN,LEFT,RIGHT)
+    action_list = (UP,DOWN,LEFT,RIGHT)
     nactions = len(action_list)
 
     def __init__(self, display=False, gameover= False):
@@ -51,13 +51,16 @@ class Snake:
 
     def act(self, action):
 
-        if self.action_list[int(action)] == LEFT and self.direction != RIGHT:
+        import pdb; pdb.set_trace()  # breakpoint c8bb0440 //
+        if   action == 0:
+            return 0
+        elif action == LEFT and self.direction != RIGHT:
             self.direction = LEFT
-        elif self.action_list[int(action)] == RIGHT and self.direction != LEFT:
+        elif action == RIGHT and self.direction != LEFT:
             self.direction = RIGHT
-        elif self.action_list[int(action)] == UP and self.direction != DOWN:
+        elif action == UP and self.direction != DOWN:
             self.direction = UP
-        elif self.action_list[int(action)] == DOWN and self.direction != UP:
+        elif action == DOWN and self.direction != UP:
             self.direction = DOWN
 
 
@@ -130,7 +133,7 @@ class Snake:
                 array[x*cellsize+j, y*cellsize+i] = color
 
     def getMinimalActionSet(self):
-        return np.asarray(range(5))
+        return np.asarray(self.action_list)
 
     def getScreenDims(self):
         return WINDOWWIDTH, WINDOWHEIGHT

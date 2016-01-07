@@ -24,7 +24,7 @@ class Defaults:
     # ----------------------
     BASE_ROM_PATH = "../roms/"
     ROM = 'breakout.bin'
-    FRAME_SKIP = 4
+    FRAME_SKIP = 0
     REPEAT_ACTION_PROBABILITY = 0
 
     # ----------------------

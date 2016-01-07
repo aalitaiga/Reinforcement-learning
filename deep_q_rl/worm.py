@@ -35,7 +35,7 @@ class Snake:
     action_list = (UP,DOWN,LEFT,RIGHT)
     nactions = len(action_list)
 
-    def __init__(self, display=False, gameover= False):
+    def __init__(self, display=False, gameover=False):
         startx = random.randint(5, CELLWIDTH - 6)
         starty = random.randint(5, CELLHEIGHT - 6)
         self.wormCoords = [
@@ -50,7 +50,7 @@ class Snake:
 
     def act(self, action):
 
-        if   action == 0:
+        if action == 0:
             return 0
         elif action == LEFT and self.direction != RIGHT:
             self.direction = LEFT
@@ -113,10 +113,10 @@ class Snake:
 
         # snake
         for point in self.wormCoords:
-            self._fillArray(array, point['x'], point['y'], CELLSIZE, 150)
+            self._fillArray(array, point['y'], point['x'], CELLSIZE, 150)
 
         # apple
-        self._fillArray(array, self.apple['x'], self.apple['y'], CELLSIZE, 255)
+        self._fillArray(array, self.apple['y'], self.apple['x'], CELLSIZE, 255)
 
         # borders
         array[:CELLSIZE,:] = 90*np.ones((CELLSIZE,WINDOWHEIGHT))

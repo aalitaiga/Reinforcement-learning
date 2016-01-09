@@ -64,10 +64,7 @@ class Snake:
 
         # move the worm by adding a segment in the direction it is moving
         if self.direction == UP:
-            try :
-                newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] - 1}
-            except : 
-                import pdb; pdb.set_trace()
+            newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] - 1}
         elif self.direction == DOWN:
             newHead = {'x': self.wormCoords[HEAD]['x'], 'y': self.wormCoords[HEAD]['y'] + 1}
         elif self.direction == LEFT:
@@ -167,8 +164,11 @@ class Snake:
             #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
 
-    def getRandomLocation(self):
-        return {'x': random.randint(1, CELLWIDTH - 2), 'y': random.randint(1, CELLHEIGHT - 2)}
+    def getRandomLocation(self, i=0):
+        location = {'x': random.randint(1, CELLWIDTH - 2), 'y': random.randint(1, CELLHEIGHT - 2)}
+        if location in self.wormCoords:
+            return self.getRandomLocation(i+1)
+        return location
 
 def drawScore(score):
     scoreSurf = BASICFONT.render('Score: %s' % (score), True, WHITE)

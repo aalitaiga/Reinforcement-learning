@@ -81,15 +81,15 @@ class Snake:
             self.gameover = True
             del self.wormCoords[0]
             #self.reset_game()
-            return -10 # game over
+            return -1 # game over
         for wormBody in self.wormCoords[1:]:
             if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
                 self.gameover = True
                 del self.wormCoords[0]
                 #self.reset_game()
-                return -10 # game over
+                return -1 # game over
 
-        reward = -1
+        reward = 0
         # check if worm has eaten an apple
         if self.wormCoords[HEAD]['x'] == self.apple['x'] and self.wormCoords[HEAD]['y'] == self.apple['y']:
             # don't remove worm's tail segment

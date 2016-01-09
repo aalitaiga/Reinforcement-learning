@@ -29,3 +29,4 @@ for f in range(w.shape[0]): # filters
         plt.yticks(())
         count += 1
 plt.show()
+plt.savefig('nn.png')

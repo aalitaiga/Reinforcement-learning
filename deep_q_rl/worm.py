@@ -113,16 +113,17 @@ class Snake:
 
         # snake
         for point in self.wormCoords:
-            self._fillArray(array, point['y'], point['x'], CELLSIZE, 120)
+            self._fillArray(array, point['y'], point['x'], CELLSIZE, 100)
+        self.__fillArray(array, self.wormCoords[HEAD]['y'], self.wormCoords[HEAD]['x'], CELLSIZE, 120)
 
         # apple
         self._fillArray(array, self.apple['y'], self.apple['x'], CELLSIZE, 255)
 
         # borders
-        array[:CELLSIZE,:] = 60*np.ones((CELLSIZE,WINDOWHEIGHT))
-        array[-CELLSIZE:,:] = 60*np.ones((CELLSIZE,WINDOWHEIGHT))
-        array[:,:CELLSIZE] = 60*np.ones((WINDOWWIDTH,CELLSIZE))
-        array[:,-CELLSIZE:] = 60*np.ones((WINDOWWIDTH,CELLSIZE))
+        array[:CELLSIZE,:] = 100*np.ones((CELLSIZE,WINDOWHEIGHT))
+        array[-CELLSIZE:,:] = 100*np.ones((CELLSIZE,WINDOWHEIGHT))
+        array[:,:CELLSIZE] = 100*np.ones((WINDOWWIDTH,CELLSIZE))
+        array[:,-CELLSIZE:] = 100*np.ones((WINDOWWIDTH,CELLSIZE))
         return array
 
     def _fillArray(self,array,x,y,cellsize,color):

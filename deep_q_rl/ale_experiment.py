@@ -12,7 +12,6 @@ Author: Nathan Sprague
 import logging
 import numpy as np
 import random
-import pygame
 import sys
 import time
 from pygame.locals import *
@@ -198,7 +197,7 @@ class ALEExperiment(object):
 
         assert self.buffer_count >= 2
         index = self.buffer_count % self.buffer_length - 1
-        max_image = np.maximum(self.screen_buffer[index, ...],
-                               self.screen_buffer[index - 1, ...])
+        # max_image = np.maximum(self.screen_buffer[index, ...],
+        #                        self.screen_buffer[index - 1, ...])
         # return self.resize_image(max_image)
-        return max_image
+        return self.screen_buffer[index, ...]

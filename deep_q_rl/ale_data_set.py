@@ -5,6 +5,7 @@ construct randomly selected batches of phi's from the stored history.
 import numpy as np
 import time
 import theano
+import matplotlib.pyplot as plt
 
 floatX = theano.config.floatX
 

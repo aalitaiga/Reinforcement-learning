@@ -84,7 +84,7 @@ class DeepQLearner:
             broadcastable=(False, True))
 
         q_vals = lasagne.layers.get_output(self.l_out, states / input_scale)
-        
+
         if self.freeze_interval > 0:
             next_q_vals = lasagne.layers.get_output(self.next_l_out,
                                                     next_states / input_scale)
@@ -105,7 +105,7 @@ class DeepQLearner:
             # the clip bounds. To avoid this, we extend the loss
             # linearly past the clip point to keep the gradient constant
             # in that regime.
-            # 
+            #
             # This is equivalent to declaring d loss/d q_vals to be
             # equal to the clipped diff, then backpropagating from
             # there, which is what the DeepMind implementation does.

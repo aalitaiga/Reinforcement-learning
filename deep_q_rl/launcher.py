@@ -180,20 +180,6 @@ def launch(args, defaults, description):
         theano.config.dnn.conv.algo_bwd = 'deterministic'
 
     ale = Snake(display=True)
-    #ale.setInt('random_seed', rng.randint(1000))
-
-    # if parameters.display_screen:
-    #     import sys
-    #     if sys.platform == 'darwin':
-    #         import pygame
-    #         pygame.init()
-    #         ale.setBool('sound', False) # Sound doesn't work on OSX
-
-    # ale.setBool('display_screen', parameters.display_screen)
-    # ale.setFloat('repeat_action_probability',
-    #              parameters.repeat_action_probability)
-
-    # ale.loadROM(full_rom_path)
 
     num_actions = ale.nactions
 
@@ -242,8 +228,6 @@ def launch(args, defaults, description):
 
 
     experiment.run()
-
-
 
 if __name__ == '__main__':
     pass

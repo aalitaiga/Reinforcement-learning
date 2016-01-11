@@ -1,11 +1,6 @@
 #! /usr/bin/env python
 """
-Execute a training run of deep-Q-Leaning with parameters that
-are consistent with:
-
-Playing Atari with Deep Reinforcement Learning
-NIPS Deep Learning Workshop 2013
-
+Execute a training run of deep-Q-Leaning
 """
 
 import launcher

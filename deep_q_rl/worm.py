@@ -1,7 +1,6 @@
 import numpy as np
 import random
 import pygame
-import time
 from pygame.locals import *
 
 UP = 'up'
@@ -50,7 +49,7 @@ class Snake:
 
     def act(self, action):
 
-        if   action == 0:
+        if action == 0:
             return 0
         elif action == LEFT and self.direction != RIGHT:
             self.direction = LEFT
@@ -60,7 +59,6 @@ class Snake:
             self.direction = UP
         elif action == DOWN and self.direction != UP:
             self.direction = DOWN
-
 
         # move the worm by adding a segment in the direction it is moving
         if self.direction == UP:
@@ -77,13 +75,11 @@ class Snake:
         if self.wormCoords[HEAD]['x'] == 0 or self.wormCoords[HEAD]['x'] == CELLWIDTH - 1 or self.wormCoords[HEAD]['y'] == 0 or self.wormCoords[HEAD]['y'] == CELLHEIGHT - 1:
             self.gameover = True
             del self.wormCoords[0]
-            #self.reset_game()
             return -1 # game over
         for wormBody in self.wormCoords[1:]:
             if wormBody['x'] == self.wormCoords[HEAD]['x'] and wormBody['y'] == self.wormCoords[HEAD]['y']:
                 self.gameover = True
                 del self.wormCoords[0]
-                #self.reset_game()
                 return -1 # game over
 
         reward = 0
@@ -101,7 +97,6 @@ class Snake:
             drawWorm(self.wormCoords)
             drawApple(self.apple)
             drawEdge()
-            #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
         return reward
 
@@ -111,7 +106,7 @@ class Snake:
         # snake
         for point in self.wormCoords:
             self._fillArray(array, point['y'], point['x'], CELLSIZE, 100)
-        self.__fillArray(array, self.wormCoords[HEAD]['y'], self.wormCoords[HEAD]['x'], CELLSIZE, 120)
+        self._fillArray(array, self.wormCoords[HEAD]['y'], self.wormCoords[HEAD]['x'], CELLSIZE, 120)
 
         # apple
         self._fillArray(array, self.apple['y'], self.apple['x'], CELLSIZE, 255)
@@ -161,12 +156,11 @@ class Snake:
             drawWorm(self.wormCoords)
             drawApple(self.apple)
             drawEdge()
-            #drawScore(len(self.wormCoords) - 3)
             pygame.display.update()
 
     def getRandomLocation(self, i=0):
         location = {'x': random.randint(1, CELLWIDTH - 2), 'y': random.randint(1, CELLHEIGHT - 2)}
-        if location in self.wormCoords:
+        if location in self.wormCoords and i <= 100:
             return self.getRandomLocation(i+1)
         return location
 
@@ -203,5 +197,3 @@ def drawEdge():
     pygame.draw.rect(DISPLAYSURF, EDGE, ((WINDOWHEIGHT - CELLSIZE)*ZOOM, 0, CELLSIZE*ZOOM, WINDOWHEIGHT*ZOOM ))
     pygame.draw.rect(DISPLAYSURF, EDGE, (0, 0, CELLSIZE*ZOOM, WINDOWWIDTH*ZOOM))
     pygame.draw.rect(DISPLAYSURF, EDGE, (0, (WINDOWWIDTH - CELLSIZE)*ZOOM, WINDOWWIDTH*ZOOM, CELLSIZE*ZOOM ))
-
-

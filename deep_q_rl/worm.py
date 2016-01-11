@@ -111,7 +111,7 @@ class Snake:
         # snake
         for point in self.wormCoords:
             self._fillArray(array, point['y'], point['x'], CELLSIZE, 100)
-        self.__fillArray(array, self.wormCoords[HEAD]['y'], self.wormCoords[HEAD]['x'], CELLSIZE, 120)
+        self._fillArray(array, self.wormCoords[HEAD]['y'], self.wormCoords[HEAD]['x'], CELLSIZE, 120)
 
         # apple
         self._fillArray(array, self.apple['y'], self.apple['x'], CELLSIZE, 255)
